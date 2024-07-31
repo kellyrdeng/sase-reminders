@@ -22,7 +22,7 @@ const dbClient = new Client({
 dbClient.connect()
   .then(() => console.log('Connected to PostgreSQL'))
   .catch(err => console.error('Connection error', err.stack));
-
+/*
 //setup Twilio (for SMS)
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -42,7 +42,7 @@ const sendSlackMessage = (channel, text) => {
     channel: channel,
     text: text
   });
-};
+};*/
 
 //API endpoints
 app.post('/addMember', async (req, res) => {
@@ -60,7 +60,7 @@ app.post('/scheduleReminder', async (req, res) => {
     const { message, time } = req.body;
     try {
       await dbClient.query('INSERT INTO reminders (message, time) VALUES ($1, $2)', [message, time]);
-      res.send('Reminder scheduled');
+      res.status(201).send('Reminder scheduled');
     } catch (error) {
       console.error('Error adding reminder:', error);
       res.status(500).send('Error adding reminder');
@@ -87,6 +87,7 @@ app.get('/reminders', async (req, res) => {
   }
 });
 
+/*
 //cron job for scheduling reminders
 cron.schedule('0 8 * * *', async () => { // '0 8 * * *' schedules job to run every day at 8:00am
     const now = new Date();
@@ -110,7 +111,7 @@ cron.schedule('0 8 * * *', async () => { // '0 8 * * *' schedules job to run eve
     } catch (error) {
       console.error('Error sending reminders:', error);
     }
-  });
+  });*/
 
 //start server
 app.listen(port, () => {
